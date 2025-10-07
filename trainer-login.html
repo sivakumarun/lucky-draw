@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trainer Registration - Lucky Draw</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            width: 100%;
+            max-width: 500px;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #667eea;
+            font-size: 32px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header p {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-group input.error,
+        .form-group select.error {
+            border-color: #ff6b6b;
+        }
+
+        .error-message {
+            color: #ff6b6b;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .btn-enroll {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-enroll:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-enroll:active {
+            transform: translateY(0);
+        }
+
+        .btn-enroll:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .success-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .success-modal.show {
+            display: flex;
+        }
+
+        .success-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 400px;
+            animation: bounceIn 0.5s ease-out;
+        }
+
+        @keyframes bounceIn {
+            0% {
+                transform: scale(0.3);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .success-icon {
+            font-size: 80px;
+            color: #51cf66;
+            margin-bottom: 20px;
+        }
+
+        .ticket-number {
+            font-size: 48px;
+            font-weight: bold;
+            color: #667eea;
+            margin: 20px 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .success-content h2 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .success-content p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .btn-close {
+            padding: 12px 30px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-close:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .registration-status {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .registration-status.show {
+            display: block;
+        }
+
+        .registration-status.closed {
+            background: #f8d7da;
+            border-left-color: #dc3545;
+        }
+
+        .registration-status p {
+            color: #856404;
+            margin: 0;
+            font-weight: 500;
+        }
+
+        .registration-status.closed p {
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>🎉 Lucky Draw Registration</h1>
+        <p>Enter your details to participate</p>
+    </div>
+
+    <div class="registration-status" id="registrationStatus">
+        <p id="statusMessage"></p>
+    </div>
+
+    <form id="registrationForm">
+        <div class="form-group">
+            <label for="employeeId">SSO ID *</label>
+            <input
+                    type="text"
+                    id="employeeId"
+                    name="employeeId"
+                    placeholder="Enter 9-digit SSO ID"
+                    maxlength="9"
+                    required
+            >
+            <div class="error-message" id="employeeIdError">SSO ID must be exactly 9 digits</div>
+        </div>
+
+        <div class="form-group">
+            <label for="employeeName">Employee Name *</label>
+            <input
+                    type="text"
+                    id="employeeName"
+                    name="employeeName"
+                    placeholder="Enter your full name"
+                    required
+            >
+            <div class="error-message" id="employeeNameError">Name should only contain letters and spaces</div>
+        </div>
+
+        <div class="form-group">
+            <label for="atmLocation">ATM Location *</label>
+            <select id="atmLocation" name="atmLocation" required>
+                <option value="">-- Select ATM --</option>
+                <option value="Benhur-F">Benhur F</option>
+                <option value="Dinesh-Kumar">Dinesh Kumar</option>
+                <option value="Harish-KS">Harish KS</option>
+                <option value="Sivakumar-Kotipatruni">Sivakumar Kotipatruni</option>
+                <!--<option value="ATM-Central">ATM Central</option>-->
+            </select>
+            <div class="error-message" id="atmLocationError">Please select an ATM location</div>
+        </div>
+
+        <button type="submit" class="btn-enroll" id="enrollBtn">Enroll Now</button>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p style="margin-top: 10px; color: #667eea;">Processing your registration...</p>
+        </div>
+    </form>
+</div>
+
+<div class="success-modal" id="successModal">
+    <div class="success-content">
+        <div class="success-icon">🎊</div>
+        <h2>Registration Successful!</h2>
+        <p>Your Coupon number is:</p>
+        <div class="ticket-number" id="ticketNumber">---</div>
+        <p>Good luck with the draw!</p>
+        <button class="btn-close" onclick="closeModal()">Close</button>
+    </div>
+</div>
+
+<script>
+    // Replace with your actual Google Apps Script Web App URL
+    const API_URL = 'https://script.google.com/macros/s/AKfycbx4ceoareWUSpRbbIuf6wrXjxuERw739GYnOlNtqZ_qu_N_y8Q98IRCAyxZao3sD8BkWg/exec';
+
+    const form = document.getElementById('registrationForm');
+    const employeeIdInput = document.getElementById('employeeId');
+    const employeeNameInput = document.getElementById('employeeName');
+    const atmLocationSelect = document.getElementById('atmLocation');
+    const enrollBtn = document.getElementById('enrollBtn');
+    const loading = document.getElementById('loading');
+    const successModal = document.getElementById('successModal');
+
+    // Validation functions
+    function validateEmployeeId(id) {
+        return /^\d{9}$/.test(id);
+    }
+
+    function validateEmployeeName(name) {
+        return /^[A-Za-z\s]+$/.test(name);
+    }
+
+    function showError(inputElement, errorElement, message) {
+        inputElement.classList.add('error');
+        errorElement.textContent = message;
+        errorElement.classList.add('show');
+    }
+
+    function hideError(inputElement, errorElement) {
+        inputElement.classList.remove('error');
+        errorElement.classList.remove('show');
+    }
+
+    // Real-time validation
+    employeeIdInput.addEventListener('input', (e) => {
+        e.target.value = e.target.value.replace(/\D/g, '');
+        const errorElement = document.getElementById('employeeIdError');
+        if (e.target.value && !validateEmployeeId(e.target.value)) {
+            showError(e.target, errorElement, 'SSO ID must be exactly 9 digits');
+        } else {
+            hideError(e.target, errorElement);
+        }
+    });
+
+    employeeNameInput.addEventListener('input', (e) => {
+        e.target.value = e.target.value.replace(/[^A-Za-z\s]/g, '');
+        const errorElement = document.getElementById('employeeNameError');
+        if (e.target.value && !validateEmployeeName(e.target.value)) {
+            showError(e.target, errorElement, 'Name should only contain letters and spaces');
+        } else {
+            hideError(e.target, errorElement);
+        }
+    });
+
+    atmLocationSelect.addEventListener('change', (e) => {
+        const errorElement = document.getElementById('atmLocationError');
+        if (e.target.value) {
+            hideError(e.target, errorElement);
+        }
+    });
+
+    // Form submission
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const employeeId = employeeIdInput.value.trim();
+        const employeeName = employeeNameInput.value.trim();
+        const atmLocation = atmLocationSelect.value;
+
+        let isValid = true;
+
+        if (!validateEmployeeId(employeeId)) {
+            showError(employeeIdInput, document.getElementById('employeeIdError'), 'SSO ID must be exactly 9 digits');
+            isValid = false;
+        }
+
+        if (!validateEmployeeName(employeeName)) {
+            showError(employeeNameInput, document.getElementById('employeeNameError'), 'Name should only contain letters and spaces');
+            isValid = false;
+        }
+
+        if (!atmLocation) {
+            showError(atmLocationSelect, document.getElementById('atmLocationError'), 'Please select an ATM location');
+            isValid = false;
+        }
+
+        if (!isValid) return;
+
+        // Show loading
+        enrollBtn.disabled = true;
+        loading.classList.add('show');
+
+        try {
+            const response = await fetch(API_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    action: 'register',
+                    employeeId: employeeId,
+                    employeeName: employeeName,
+                    atmLocation: atmLocation
+                })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                document.getElementById('ticketNumber').textContent = data.ticketNumber;
+                successModal.classList.add('show');
+                form.reset();
+            } else {
+                alert(data.message || 'Registration failed. Please try again.');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred. Please try again later.');
+        } finally {
+            enrollBtn.disabled = false;
+            loading.classList.remove('show');
+        }
+    });
+
+    function closeModal() {
+        successModal.classList.remove('show');
+    }
+
+    // Check registration status on page load
+    async function checkRegistrationStatus() {
+        try {
+            const response = await fetch(API_URL + '?action=checkStatus');
+            const data = await response.json();
+
+            const statusDiv = document.getElementById('registrationStatus');
+            const statusMessage = document.getElementById('statusMessage');
+
+            if (!data.isOpen) {
+                statusDiv.classList.add('show', 'closed');
+                statusMessage.textContent = 'Registration is currently closed.';
+                enrollBtn.disabled = true;
+            } else {
+                statusDiv.classList.add('show');
+                statusMessage.textContent = 'Registration is open. Enroll now!';
+            }
+        } catch (error) {
+            console.error('Error checking status:', error);
+        }
+    }
+
+    // Uncomment to check registration status on load
+    // checkRegistrationStatus();
+</script>
+</body>
+</html>

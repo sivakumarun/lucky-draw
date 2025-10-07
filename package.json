@@ -1,0 +1,24 @@
+{
+  "name": "lucky-draw-system",
+  "version": "1.0.0",
+  "description": "Comprehensive Lucky Draw System with Trainer and Admin Interfaces",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "deploy": "vite build && echo 'Build complete! Deploy the dist folder to your hosting service.'"
+  },
+  "keywords": [
+    "lucky-draw",
+    "registration",
+    "raffle",
+    "admin-dashboard"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "vite": "^5.0.0"
+  },
+  "dependencies": {}
+}
