@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trainer Registration - Lucky Draw</title>
+  <script type="module" crossorigin src="/assets/trainer-C6pZQgg8.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/api-XB51Jzmp.js">
+  <link rel="stylesheet" crossorigin href="/assets/trainer-BUYkPzbw.css">
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>🎉 Lucky Draw Registration</h1>
+    <p>Enter your details to participate</p>
+  </div>
+
+  <div class="registration-status" id="registrationStatus">
+    <p id="statusMessage"></p>
+  </div>
+
+  <form id="registrationForm">
+    <div class="form-group">
+      <label for="employeeId">SSO ID *</label>
+      <input
+              type="text"
+              id="employeeId"
+              name="employeeId"
+              placeholder="Enter 9-digit SSO ID"
+              maxlength="9"
+              required
+              autocomplete="off"
+      >
+      <div class="error-message" id="employeeIdError">SSO ID must be exactly 9 digits</div>
+    </div>
+
+    <div class="form-group">
+      <label for="employeeName">Employee Name *</label>
+      <input
+              type="text"
+              id="employeeName"
+              name="employeeName"
+              placeholder="Enter your full name"
+              required
+              autocomplete="name"
+      >
+      <div class="error-message" id="employeeNameError">Name should only contain letters and spaces</div>
+    </div>
+
+    <div class="form-group">
+      <label for="atmLocation">ATM Location *</label>
+      <select id="atmLocation" name="atmLocation" required>
+        <option value="">-- Select ATM --</option>
+      </select>
+      <div class="error-message" id="atmLocationError">Please select an ATM location</div>
+    </div>
+
+    <button type="submit" class="btn-enroll" id="enrollBtn">Enroll Now</button>
+
+    <div class="loading" id="loading">
+      <div class="spinner"></div>
+      <p style="margin-top: 10px; color: #667eea;">Processing your registration...</p>
+    </div>
+  </form>
+
+  <div class="back-home">
+    <a href="/">← Back to Home</a>
+  </div>
+</div>
+
+<div class="success-modal" id="successModal">
+  <div class="success-content">
+    <div class="success-icon">🎊</div>
+    <h2>Registration Successful!</h2>
+    <p>Your Coupon number is:</p>
+    <div class="ticket-number" id="ticketNumber">---</div>
+    <p>Good luck with the draw!</p>
+    <button class="btn-close" id="closeModalBtn">Close</button>
+  </div>
+</div>
+
+</body>
+</html>
